@@ -1,96 +1,88 @@
 # Covid-19-Assesment
 
-##  Deep learning model using LSTM neural network to predict new cases (cases_new) in Malaysia using the past 30 daysof number of cases.
+##  Deep learning model using LSTM neural network to predict new cases (cases_new) in Malaysia using the past 30 days of number of cases.
 
 The year 2020 marked a global catastrophe with the emergence of COVID-19, a pandemic that impacted over 200 countries. Governments implemented various measures such as travel restrictions, quarantines, and lockdowns to curb the virus's spread. However, these efforts were hindered by a lackadaisical attitude, contributing to widespread infection and loss of lives. Scientists attributed the pandemic's severity to the absence of AI-assisted tracking systems. In response, they advocated for the use of deep learning models, particularly LSTM neural networks, to predict daily COVID-19 cases. Your assignment involves creating such a model to forecast new cases in Malaysia based on the past 30 days' data. The dataset used in this project are from https://github.com/MoH-Malaysia/covid19-public.
 
 ## Directory Structure
-- [Imran_Assesment1.py](https://github.com/Imraanjaafar/Computer-Vision-Image-Classification-for-Cracks-or-No-Cracks-Dataset/blob/main/Imran_Assesment1.py)
+- [Imran_Capstone_2.py](https://github.com/Imraanjaafar/Covid-19-Assesment/blob/main/Imran_Capstone_2.py)
 
-This code implements a transfer learning pipeline using TensorFlow and Keras for image classification. Let's break down the code into different sections:
+This code appears to be related to time series analysis, specifically using TensorFlow and Keras to build and train LSTM (Long Short-Term Memory) models for forecasting COVID-19 cases in Malaysia. Here's a generalized explanation of the code:
 
-### Import Packages
+### Import Libraries:
 
-- The necessary libraries are imported, including TensorFlow, Keras, NumPy, Matplotlib, and others.
+- The code starts by importing various libraries such as TensorFlow, Pandas, Matplotlib, and Seaborn for data manipulation, visualization, and machine learning.
 
-### Data Loading
+### Download and Load Dataset:
 
-- The code specifies paths for training, validation, and test datasets and sets batch size and image size.
-- It loads datasets using tf.keras.utils.image_dataset_from_directory for training, validation, and test sets.
+- The code specifies the path to a CSV file containing COVID-19 cases data for Malaysia and loads it into a Pandas DataFrame.
+- Selected columns related to date and different case types are extracted.
 
-### Inspect Data Examples:
+### Data Preprocessing:
 
-- The code visualizes a few examples from the training dataset using Matplotlib.
+- The 'date' column is converted to a datetime format.
+- The 'cases_new' column, representing new cases, is cleaned by removing commas and converting it to numeric values.
+- Basic data inspection is performed, and visualizations of different case types are plotted over time.
 
-### Further Split Validation and Test Dataset:
+### Data Cleaning:
 
-- The validation dataset is split from the test dataset using tf.data.experimental.cardinality.
+- Null values in the 'cases_new' column are filled with the mean value.
+- Duplicate rows in the dataset are removed.
 
-### Convert Datasets into PrefetchDataset:
+### Feature Engineering:
 
-- The code converts the TensorFlow datasets into PrefetchDataset for better performance using the prefetch method.
+- Lag features are created for the target variable 'cases_new,' which means creating columns with the past values of 'cases_new' to be used as features in the model.
 
-### Create a Sequential Model for Image Augmentation:
+### Train-Validation-Test Split:
 
-- Image augmentation is set up using a Sequential model with random flip and rotation.
+- The dataset is split into training, validation, and test sets, ensuring that the temporal order of the data is maintained.
 
-### Apply Image Augmentation:
+### Data Normalization:
 
-- Image augmentation is applied to a single image from the training dataset, and the results are visualized.
+- The dataset is normalized using mean and standard deviation values calculated from the training set.
 
-### Define a Layer for Data Normalization:
+### Data Inspection after Normalization:
 
-- A layer for data normalization is defined using MobileNetV2's preprocess_input function.
+- Violin plots are used to visualize the distribution of normalized data.
 
-### Load Pretrained Model and Freeze Feature Extractor:
+### TensorBoard Callbacks:
 
-- The ResNet50 model pretrained on ImageNet is loaded using Keras applications.
-- The feature extractor is frozen to retain the pretrained weights.
+- TensorBoard callbacks are set up for logging training progress.
 
-### Create Model Using Functional API:
+### Single-Step Model Development:
 
-- A new model is constructed using the Functional API, incorporating data augmentation, data normalization, feature extraction, and classification layers.
+- An LSTM model is created for the scenario of predicting the next day's cases.
+- The model is compiled, trained, and evaluated on the validation and test sets.
+- Evaluation metrics such as Mean Squared Error (MSE) and Mean Absolute Percentage Error (MAPE) are used.
 
-### Compile the Model:
+### Plotting Results:
 
-- The model is compiled with an Adam optimizer, sparse categorical crossentropy loss, and accuracy as the evaluation metric.
+- The model's predictions are plotted against the actual values.
 
-### Create TensorBoard Callback:
+### Multi-Step Model Development:
 
-- A TensorBoard callback is set up for model training visualization.
+- Another LSTM model is created for the scenario of predicting multiple days ahead.
+- The model is compiled, trained, and evaluated similarly to the single-step model.
 
-### Evaluate Model Before Training:
+### Plotting Multi-Step Results:
 
-- The model is evaluated on the test dataset before training.
+- The multi-step model's predictions are plotted against the actual values.
 
-### Model Training:
+### Display Model Summary and Structure:
 
-- The model is trained on the training dataset with early stopping and TensorBoard callbacks.
-
-### Fine-tune the Model:
-
-- The top layers of the pretrained model are unfrozen for fine-tuning.
-- The model is compiled again, and fine-tuning is performed.
-
-### Evaluate Model After Fine-tuning:
-
-- The model is evaluated on the test dataset after fine-tuning.
-
-### Deployment:
-
-- A batch of images from the test dataset is used for prediction.
-- Predictions and actual labels are visualized using Matplotlib.
-
-### Save the Model:
-
-- The trained model is saved as 'transfer_learning_model.h5'.
+- The summary and structure of both the single-step and multi-step models are displayed.
 
 ## Results
-- The model achieved an accuracy of 96.16% on the test set, which demonstrates its effectiveness in classifying concrete images with and without cracks.
+- The Single-Step Model achieved a Mean Absolute Percentage Error (MAPE) error of 0.51, while the Multi-Step Model exhibited a MAPE error of 0.94. These results underscore the model's effectiveness in forecasting daily COVID cases.
 
 ## Model Architecture
 
-- The model design utilizes the ResNet50 architecture that includes the layers of the model, the output shape of each layer, and the number of parameters in each layer.
-- Presented below is an overview of the model's architecture:
+- This section provides an overview of the architectures of two models: the Single-Step Model and the Multi-Step Model.
 
-![model](https://github.com/Imraanjaafar/Computer-Vision-Image-Classification-for-Cracks-or-No-Cracks-Dataset/assets/151133555/5122dcb3-8ac0-4fb4-90fb-14587e9001ea)
+### Single Step Model
+![Architecture_SingleStep](https://github.com/Imraanjaafar/Covid-19-Assesment/assets/151133555/59fddb99-4b47-4d62-ac5b-b4829ad59af8)
+
+### Multi Step Model
+![Architecture_MultipleStep](https://github.com/Imraanjaafar/Covid-19-Assesment/assets/151133555/9601a95f-40ad-4796-8064-e12809908eac)
+
+
